@@ -2,13 +2,12 @@ name: Test script
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -16,25 +15,25 @@ jobs:
         python-version: ["3.11"]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install poetry
-      run: |
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-        echo "$HOME/.poetry/bin" >> $GITHUB_PATH
-    - name: Poetry Version
-      run: |
-        poetry --version
-    - name: Poetry Install Dependencies
-      run: |
-        poetry install --no-interaction
-    - name: Test with pytest
-      run: |
-        poetry run pytest
-    - name: Lint with flake8
-      run: |
-        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+      - name: Poetry Version
+        run: |
+          poetry --version
+      - name: Poetry Install Dependencies
+        run: |
+          poetry install --no-interaction
+      - name: Test with pytest
+        run: |
+          poetry run pytest
+      - name: Lint with flake8
+        run: |
+          poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
